@@ -138,3 +138,21 @@ function siguientePagina() {
 function reiniciar() {
     location.reload();
 }
+
+function mostrarPaginaDoble(texto, imagen) {
+    const contenido = document.getElementById("contenido");
+
+    contenido.innerHTML = `
+        <div class="paginaDoble">
+
+            <div class="columnaTexto">
+                <p>${texto}</p>
+            </div>
+
+            <div class="columnaImagen">
+                <img src="${imagen}" style="width:100%; border-radius:12px;">
+            </div>
+
+        </div>
+    `;
+}
