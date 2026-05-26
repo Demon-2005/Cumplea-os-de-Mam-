@@ -33,17 +33,21 @@ function iniciarMusica() {
     const reproductor = document.getElementById("reproductor");
     const musicaBox = document.getElementById("musicaBox");
 
-    if (!selector || !selector.value) return;
+    if (!selector.value) return;
 
     reproductor.src = selector.value;
-    reproductor.loop = true;
+    reproductor.load();
 
-    reproductor.play().catch(err => {
-        console.log("El navegador bloqueó el audio:", err);
-    });
+    const playPromise = reproductor.play();
 
-    if (musicaBox) {
-        musicaBox.classList.add("oculto");
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                musicaBox.classList.add("oculto");
+            })
+            .catch(err => {
+                console.log("Bloqueado por autoplay:", err);
+            });
     }
 }
 
