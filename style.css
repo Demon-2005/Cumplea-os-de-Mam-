@@ -1,83 +1,71 @@
 body {
     margin: 0;
     min-height: 100vh;
+
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
 
     background: linear-gradient(135deg, #0f172a, #111827);
     color: #e2e8f0;
+
     font-family: Arial, sans-serif;
 
-    padding: 20px;
-    gap: 20px;
-}
-
-/* ---------------- MUSICA ---------------- */
-
-.musica {
-    width: 100%;
-    max-width: 420px;
-    text-align: center;
-
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 16px;
-
-    border: 1px solid rgba(94, 234, 212, 0.25);
-    box-shadow: 0 0 20px rgba(45, 212, 191, 0.12);
+    overflow: hidden;
 }
 
 /* ---------------- CONTENEDOR ---------------- */
 
 .contenedor {
-    width: 100%;
-    max-width: 420px;
-
     text-align: center;
-    background: #1e293b;
 
+    background: #1e293b;
     padding: 30px;
+
     border-radius: 20px;
 
     box-shadow: 0 0 25px rgba(45, 212, 191, 0.15);
     border: 1px solid rgba(94, 234, 212, 0.25);
+
+    width: 90%;
+    max-width: 420px;
 }
 
 /* ---------------- INPUTS ---------------- */
 
-input,
-select {
-    width: 100%;
+input {
     padding: 10px;
-
     font-size: 16px;
+
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
 
     margin-top: 10px;
+
     text-align: center;
+    width: 100%;
 }
 
 /* ---------------- BOTONES ---------------- */
 
 button {
-    width: 100%;
     margin-top: 15px;
 
-    padding: 10px;
+    padding: 10px 20px;
     font-size: 16px;
 
     border: none;
     border-radius: 12px;
 
     cursor: pointer;
-    transition: 0.3s;
 
     background: #2dd4bf;
     color: #0f172a;
+
     font-weight: bold;
+
+    transition: 0.3s;
 }
 
 button:hover {
@@ -85,77 +73,113 @@ button:hover {
     background: #5eead4;
 }
 
-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+/* ---------------- SOBRE 3D ---------------- */
+
+.sobre {
+    font-size: 110px;
+    cursor: pointer;
+    user-select: none;
+
+    filter: drop-shadow(0 0 18px rgba(45,212,191,0.4));
+
+    transition: transform 0.6s, opacity 0.6s;
+    transform-style: preserve-3d;
+}
+
+.sobre:hover {
+    transform: scale(1.05);
+}
+
+/* animación apertura */
+.sobre.abriendo {
+    transform: rotateX(75deg) scale(0.6);
+    opacity: 0;
+}
+
+/* ---------------- PARTÍCULAS ---------------- */
+
+.particula {
+    position: absolute;
+
+    width: 6px;
+    height: 6px;
+
+    background: #5eead4;
+    border-radius: 50%;
+
+    box-shadow: 0 0 10px #5eead4;
+
+    animation: flotar 0.8s ease-out forwards;
+}
+
+@keyframes flotar {
+    0% {
+        transform: translate(0,0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-120px) translateX(40px) scale(0);
+        opacity: 0;
+    }
+}
+
+/* ---------------- LIBRO 3D ---------------- */
+
+.libro {
+    perspective: 1200px;
+
+    width: 90%;
+    max-width: 500px;
+}
+
+.pagina {
+    background: #0f172a;
+
+    padding: 25px;
+    border-radius: 15px;
+
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+
+    transform-style: preserve-3d;
+
+    animation: abrirLibro 0.8s ease;
+}
+
+@keyframes abrirLibro {
+    from {
+        transform: rotateY(20deg) translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: rotateY(0deg) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ---------------- TEXTO ---------------- */
+
+.pagina p {
+    line-height: 1.6;
+}
+
+/* ---------------- IMAGENES ---------------- */
+
+.imagenLibro {
+    width: 100%;
+    max-height: 240px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    margin-top: 15px;
+
+    border: 2px solid #5eead4;
+    box-shadow: 0 0 15px rgba(45, 212, 191, 0.2);
 }
 
 /* ---------------- OCULTO ---------------- */
 
 .oculto {
     display: none;
-}
-
-/* ---------------- SOBRE ---------------- */
-
-.sobreEmoji {
-    font-size: 110px;
-    cursor: pointer;
-    user-select: none;
-
-    transition: transform 0.3s;
-
-    filter: drop-shadow(0 0 15px rgba(45,212,191,0.35));
-}
-
-.sobreEmoji:hover {
-    transform: scale(1.1);
-}
-
-/* ---------------- CARTA ---------------- */
-
-.carta {
-    max-width: 420px;
-    animation: aparecer 0.4s ease;
-}
-
-.carta p {
-    line-height: 1.6;
-}
-
-/* ---------------- IMÁGENES ---------------- */
-
-.imagenCarta {
-    width: 100%;
-    max-height: 240px;
-    object-fit: cover;
-
-    border-radius: 18px;
-    margin-top: 15px;
-
-    border: 3px solid #5eead4;
-
-    box-shadow:
-        0 0 15px rgba(45, 212, 191, 0.25),
-        0 0 30px rgba(125, 211, 252, 0.12);
-}
-
-/* ---------------- BOTÓN CARTA ---------------- */
-
-.botonCarta {
-    margin-top: 20px;
-}
-
-/* ---------------- ANIMACIÓN ---------------- */
-
-@keyframes aparecer {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
