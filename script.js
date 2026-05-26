@@ -1,5 +1,4 @@
 let modoActual = "inicio";
-
 let paginaCarta = 0;
 
 const paginas = [
@@ -14,8 +13,10 @@ const paginas = [
     {
         texto: "Espero que hoy puedas descansar un poco, reírte bastante y sentirte querida, porque lo sos, muchísimo más de lo que probablemente imaginás...",
         imagen: "foto2.jpg"
-    },
+    }
 ];
+
+/* ---------------- MUSICA ---------------- */
 
 function validarFormulario() {
     const selector = document.getElementById("selectorCancion");
@@ -32,13 +33,21 @@ function iniciarMusica() {
     const reproductor = document.getElementById("reproductor");
     const musicaBox = document.getElementById("musicaBox");
 
-    if (reproductor.src === "") {
-        reproductor.src = selector.value;
-        reproductor.play();
-    }
+    if (!selector || !selector.value) return;
 
-    musicaBox.classList.add("oculto");
+    reproductor.src = selector.value;
+    reproductor.loop = true;
+
+    reproductor.play().catch(err => {
+        console.log("El navegador bloqueó el audio:", err);
+    });
+
+    if (musicaBox) {
+        musicaBox.classList.add("oculto");
+    }
 }
+
+/* ---------------- CARTA ---------------- */
 
 function mostrarSobre() {
     const contenido = document.getElementById("contenido");
@@ -47,7 +56,6 @@ function mostrarSobre() {
         <div class="sobreEmoji" onclick="abrirCarta()">
             💌
         </div>
-
         <p>Toca la carta</p>
     `;
 }
@@ -59,26 +67,23 @@ function abrirCarta() {
 
 function mostrarPaginaCarta() {
     const contenido = document.getElementById("contenido");
-
     const pagina = paginas[paginaCarta];
 
     contenido.innerHTML = `
         <div class="carta">
-
             <p>${pagina.texto}</p>
 
             ${
                 pagina.imagen
-                ? `<img src="${pagina.imagen}" class="imagenCarta">`
-                : ""
+                    ? `<img src="${pagina.imagen}" class="imagenCarta">`
+                    : ""
             }
 
             ${
                 paginaCarta < paginas.length - 1
-                ? `<button class="botonCarta" onclick="siguientePagina()">Siguiente</button>`
-                : `<h3>Te queremos mucho Ma</h3>`
+                    ? `<button class="botonCarta" onclick="siguientePagina()">Siguiente</button>`
+                    : `<h3>Te queremos mucho Ma</h3>`
             }
-
         </div>
     `;
 }
@@ -87,6 +92,8 @@ function siguientePagina() {
     paginaCarta++;
     mostrarPaginaCarta();
 }
+
+/* ---------------- FLUJO ---------------- */
 
 function enviarConEspera(tiempo) {
     const contenido = document.getElementById("contenido");
@@ -98,6 +105,15 @@ function enviarConEspera(tiempo) {
     }, tiempo);
 }
 
+function validarReinicio() {
+    const fecha = document.getElementById("fecha");
+    const boton = document.getElementById("botonReinicio");
+
+    if (!fecha || !boton) return;
+
+    boton.disabled = !fecha.value.trim();
+}
+
 function volverInicioDos() {
     modoActual = "reinicio";
 
@@ -105,7 +121,6 @@ function volverInicioDos() {
 
     contenido.innerHTML = `
         <h1>Intenta otra vez</h1>
-
         <p>Escribe la fecha en formato día/mes</p>
 
         <input
@@ -150,89 +165,42 @@ function continuar() {
     `;
 }
 
-function validarReinicio() {
-    const fecha = document.getElementById("fecha").value.trim();
-    const boton = document.getElementById("botonReinicio");
-
-    boton.disabled = !fecha;
-}
-
 function verificarFecha() {
     const fechaIngresada = document.getElementById("fecha").value.trim();
-    const contenido = document.getElementById("contenido");
 
     iniciarMusica();
 
     if (fechaIngresada === "27/05") {
-
         enviarConEspera(2000);
-
     } else {
-
-        contenido.innerHTML = `
+        document.getElementById("contenido").innerHTML = `
             <h1>Muy mal</h1>
-
             <p>Cumples el 27/05</p>
 
-            <button onclick="continuar()">
-                Continuar
-            </button>
-
-            <button onclick="volverInicioDos()">
-                Volver al inicio
-            </button>
+            <button onclick="continuar()">Continuar</button>
+            <button onclick="volverInicioDos()">Volver al inicio</button>
         `;
     }
 }
 
 function verificarFechaReinicio() {
     const fechaIngresada = document.getElementById("fecha").value.trim();
-    const contenido = document.getElementById("contenido");
 
     if (fechaIngresada === "27/05") {
 
         if (modoActual === "reinicio") {
-
             enviarConEspera(10000);
-
         } else if (modoActual === "inicio3") {
-
             mostrarSobre();
         }
 
     } else {
-
-        contenido.innerHTML = `
+        document.getElementById("contenido").innerHTML = `
             <h1>Muy mal</h1>
-
             <p>Cumples el 27/05</p>
 
-            <button onclick="continuar()">
-                Continuar
-            </button>
-
-            <button onclick="volverInicioDos()">
-                Volver al inicio
-            </button>
+            <button onclick="continuar()">Continuar</button>
+            <button onclick="volverInicioDos()">Volver al inicio</button>
         `;
     }
 }
-
-const musica = document.getElementById("musica");
-const inicio = document.getElementById("pantallaInicio");
-
-inicio.addEventListener("pointerup", async () => {
-    try {
-        await musica.play();
-        inicio.style.display = "none";
-    } catch (e) {
-        console.log("No se pudo reproducir:", e);
-    }
-});
-
-document.addEventListener("pointerup", async () => {
-    const temp = new Audio("musica.mp3");
-    temp.volume = 0;
-    await temp.play();
-    temp.pause();
-}, { once: true });
