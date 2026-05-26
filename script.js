@@ -16,7 +16,35 @@ const paginas = [
     }
 ];
 
-/* ---------------- MUSICA ---------------- */
+/* ---------------- MUSICA (NUEVO SISTEMA MANUAL) ---------------- */
+
+function cargarCancion() {
+    const selector = document.getElementById("selectorCancion");
+    const reproductor = document.getElementById("reproductor");
+
+    if (!selector || !selector.value || !reproductor) return;
+
+    reproductor.pause();
+    reproductor.src = selector.value;
+    reproductor.load();
+    reproductor.play().catch(err => {
+        console.log("No se pudo reproducir:", err);
+    });
+}
+
+function toggleMusica() {
+    const reproductor = document.getElementById("reproductor");
+
+    if (!reproductor) return;
+
+    if (reproductor.paused) {
+        reproductor.play().catch(err => console.log(err));
+    } else {
+        reproductor.pause();
+    }
+}
+
+/* ---------------- VALIDACIÓN ---------------- */
 
 function validarFormulario() {
     const selector = document.getElementById("selectorCancion");
@@ -26,39 +54,6 @@ function validarFormulario() {
     if (!selector || !fecha || !boton) return;
 
     boton.disabled = !(selector.value && fecha.value.trim());
-}
-
-function iniciarMusica() {
-    const selector = document.getElementById("selectorCancion");
-    const reproductor = document.getElementById("reproductor");
-    const musicaBox = document.getElementById("musicaBox");
-
-    if (!selector || !selector.value || !reproductor) return;
-
-    try {
-        reproductor.pause();
-        reproductor.currentTime = 0;
-
-        reproductor.src = selector.value;
-        reproductor.load();
-
-        const playPromise = reproductor.play();
-
-        if (playPromise !== undefined) {
-            playPromise
-                .then(() => {
-                    if (musicaBox) {
-                        musicaBox.classList.add("oculto");
-                    }
-                })
-                .catch(err => {
-                    console.log("Audio bloqueado:", err);
-                });
-        }
-
-    } catch (e) {
-        console.log("Error audio:", e);
-    }
 }
 
 /* ---------------- CARTA ---------------- */
@@ -182,11 +177,9 @@ function continuar() {
 function verificarFecha() {
     const fechaIngresada = document.getElementById("fecha").value.trim();
 
-    // primero validación lógica
     const correcta = fechaIngresada === "27/05";
 
     if (correcta) {
-        iniciarMusica(); // solo si es correcto y antes del cambio fuerte de UI
         enviarConEspera(2000);
     } else {
         document.getElementById("contenido").innerHTML = `
