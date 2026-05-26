@@ -126,11 +126,18 @@ function siguientePagina() {
     if (pagina < paginas.length - 1) {
         pagina++;
         document.getElementById("pagina").innerHTML = renderPagina();
-    } else {
-        document.getElementById("pagina").innerHTML = `
-            <h2>Te queremos mucho ❤️</h2>
-        `;
+        return;
     }
+
+    document.getElementById("pagina").innerHTML = `
+        <div class="finalCarta">
+            <h2>Te queremos mucho ❤️</h2>
+
+            <button onclick="reiniciar()">
+                Volver a leer
+            </button>
+        </div>
+    `;
 }
 
 /* ---------------- REINICIO ---------------- */
@@ -155,4 +162,10 @@ function mostrarPaginaDoble(texto, imagen) {
 
         </div>
     `;
+}
+
+function reiniciar() {
+    pagina = 0;
+    estado = "inicio";
+    location.reload();
 }
