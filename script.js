@@ -1,5 +1,5 @@
-let modoActual = "inicio";
-let paginaCarta = 0;
+let estado = "inicio";
+let pagina = 0;
 
 const paginas = [
     {
@@ -16,200 +16,125 @@ const paginas = [
     }
 ];
 
-/* ---------------- MUSICA (NUEVO SISTEMA MANUAL) ---------------- */
-
-function cargarCancion() {
-    const selector = document.getElementById("selectorCancion");
-    const reproductor = document.getElementById("reproductor");
-
-    if (!selector || !selector.value || !reproductor) return;
-
-    reproductor.pause();
-    reproductor.src = selector.value;
-    reproductor.load();
-    reproductor.play().catch(err => {
-        console.log("No se pudo reproducir:", err);
-    });
-}
-
-function toggleMusica() {
-    const reproductor = document.getElementById("reproductor");
-
-    if (!reproductor) return;
-
-    if (reproductor.paused) {
-        reproductor.play().catch(err => console.log(err));
-    } else {
-        reproductor.pause();
-    }
-}
-
-/* ---------------- VALIDACIÓN ---------------- */
+/* ---------------- VALIDACIÓN FECHA ---------------- */
 
 function validarFormulario() {
-    const selector = document.getElementById("selectorCancion");
     const fecha = document.getElementById("fecha");
     const boton = document.getElementById("botonEnviar");
-
-    if (!selector || !fecha || !boton) return;
-
-    boton.disabled = !(selector.value && fecha.value.trim());
-}
-
-/* ---------------- CARTA ---------------- */
-
-function mostrarSobre() {
-    const contenido = document.getElementById("contenido");
-
-    contenido.innerHTML = `
-        <div class="sobreEmoji" onclick="abrirCarta()">
-            💌
-        </div>
-        <p>Toca la carta</p>
-    `;
-}
-
-function abrirCarta() {
-    paginaCarta = 0;
-    mostrarPaginaCarta();
-}
-
-function mostrarPaginaCarta() {
-    const contenido = document.getElementById("contenido");
-    const pagina = paginas[paginaCarta];
-
-    contenido.innerHTML = `
-        <div class="carta">
-            <p>${pagina.texto}</p>
-
-            ${
-                pagina.imagen
-                    ? `<img src="${pagina.imagen}" class="imagenCarta">`
-                    : ""
-            }
-
-            ${
-                paginaCarta < paginas.length - 1
-                    ? `<button class="botonCarta" onclick="siguientePagina()">Siguiente</button>`
-                    : `<h3>Te queremos mucho Ma</h3>`
-            }
-        </div>
-    `;
-}
-
-function siguientePagina() {
-    paginaCarta++;
-    mostrarPaginaCarta();
-}
-
-/* ---------------- FLUJO ---------------- */
-
-function enviarConEspera(tiempo) {
-    const contenido = document.getElementById("contenido");
-
-    contenido.innerHTML = `<p></p>`;
-
-    setTimeout(() => {
-        mostrarSobre();
-    }, tiempo);
-}
-
-function validarReinicio() {
-    const fecha = document.getElementById("fecha");
-    const boton = document.getElementById("botonReinicio");
 
     if (!fecha || !boton) return;
 
     boton.disabled = !fecha.value.trim();
 }
 
-function volverInicioDos() {
-    modoActual = "reinicio";
-
-    const contenido = document.getElementById("contenido");
-
-    contenido.innerHTML = `
-        <h1>Intenta otra vez</h1>
-        <p>Escribe la fecha en formato día/mes</p>
-
-        <input
-            type="text"
-            id="fecha"
-            placeholder="dd/mm"
-            oninput="validarReinicio()"
-        >
-
-        <button
-            id="botonReinicio"
-            onclick="verificarFechaReinicio()"
-            disabled
-        >
-            Enviar
-        </button>
-    `;
-}
-
-function continuar() {
-    modoActual = "inicio3";
-
-    const contenido = document.getElementById("contenido");
-
-    contenido.innerHTML = `
-        <h1>Por favor pon tu fecha correcta para continuar</h1>
-
-        <input
-            type="text"
-            id="fecha"
-            placeholder="dd/mm"
-            oninput="validarReinicio()"
-        >
-
-        <button
-            id="botonReinicio"
-            onclick="verificarFechaReinicio()"
-            disabled
-        >
-            Enviar
-        </button>
-    `;
-}
-
 function verificarFecha() {
-    const fechaIngresada = document.getElementById("fecha").value.trim();
+    const fecha = document.getElementById("fecha").value.trim();
+    const correcto = fecha === "27/05";
 
-    const correcta = fechaIngresada === "27/05";
-
-    if (correcta) {
-        enviarConEspera(2000);
-    } else {
+    if (!correcto) {
         document.getElementById("contenido").innerHTML = `
             <h1>Muy mal</h1>
             <p>Cumples el 27/05</p>
 
-            <button onclick="continuar()">Continuar</button>
-            <button onclick="volverInicioDos()">Volver al inicio</button>
+            <button onclick="reiniciar()">Volver</button>
+        `;
+        return;
+    }
+
+    mostrarSobre();
+}
+
+/* ---------------- SOBRE ---------------- */
+
+function mostrarSobre() {
+    estado = "sobre";
+
+    const contenido = document.getElementById("contenido");
+
+    contenido.innerHTML = `
+        <div class="sobre" onclick="abrirSobre()">
+            💌
+        </div>
+        <p>Toca la carta</p>
+    `;
+}
+
+function abrirSobre() {
+    estado = "animacion";
+
+    const sobre = document.querySelector(".sobre");
+
+    if (sobre) {
+        sobre.classList.add("abriendo");
+    }
+
+    crearParticulas();
+
+    setTimeout(() => {
+        mostrarLibro();
+    }, 900);
+}
+
+/* ---------------- PARTÍCULAS ---------------- */
+
+function crearParticulas() {
+    const contenedor = document.getElementById("contenido");
+
+    for (let i = 0; i < 25; i++) {
+        const p = document.createElement("div");
+
+        p.className = "particula";
+        p.style.left = Math.random() * 100 + "%";
+        p.style.top = Math.random() * 100 + "%";
+
+        contenedor.appendChild(p);
+
+        setTimeout(() => {
+            p.remove();
+        }, 800);
+    }
+}
+
+/* ---------------- LIBRO ---------------- */
+
+function mostrarLibro() {
+    estado = "libro";
+
+    const contenido = document.getElementById("contenido");
+
+    contenido.innerHTML = `
+        <div class="libro">
+            <div class="pagina" id="pagina">
+                ${renderPagina()}
+            </div>
+
+            <button onclick="siguientePagina()">Siguiente</button>
+        </div>
+    `;
+}
+
+function renderPagina() {
+    const p = paginas[pagina];
+
+    return `
+        <p>${p.texto}</p>
+        ${p.imagen ? `<img src="${p.imagen}" class="imagenLibro">` : ""}
+    `;
+}
+
+function siguientePagina() {
+    if (pagina < paginas.length - 1) {
+        pagina++;
+        document.getElementById("pagina").innerHTML = renderPagina();
+    } else {
+        document.getElementById("pagina").innerHTML = `
+            <h2>Te queremos mucho ❤️</h2>
         `;
     }
 }
 
-function verificarFechaReinicio() {
-    const fechaIngresada = document.getElementById("fecha").value.trim();
+/* ---------------- REINICIO ---------------- */
 
-    if (fechaIngresada === "27/05") {
-
-        if (modoActual === "reinicio") {
-            enviarConEspera(10000);
-        } else if (modoActual === "inicio3") {
-            mostrarSobre();
-        }
-
-    } else {
-        document.getElementById("contenido").innerHTML = `
-            <h1>Muy mal</h1>
-            <p>Cumples el 27/05</p>
-
-            <button onclick="continuar()">Continuar</button>
-            <button onclick="volverInicioDos()">Volver al inicio</button>
-        `;
-    }
+function reiniciar() {
+    location.reload();
 }
