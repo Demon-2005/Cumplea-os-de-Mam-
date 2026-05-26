@@ -4,10 +4,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Carta</title>
 
@@ -16,46 +13,37 @@
 
 <body>
 
-    <!-- BLOQUE DE MÚSICA -->
+    <!-- REPRODUCTOR DE MÚSICA (VISIBLE CONTROLADO) -->
 
     <div class="musica" id="musicaBox">
 
-        <p>Elige una canción para acompañar el recorrido</p>
+        <p>Elige una canción y dale play</p>
 
-        <select
-            id="selectorCancion"
-            onchange="validarFormulario()"
-        >
+        <select id="selectorCancion">
 
             <option value="">
                 Selecciona una canción
             </option>
 
-            <option value="november-rain.mp3">
-                November Rain
-            </option>
-
-            <option value="dont-cry.mp3">
-                Don't Cry
-            </option>
-
-            <option value="eres.mp3">
-                Eres
-            </option>
-
-            <option value="is-this-love.mp3">
-                Is This Love
-            </option>
+            <option value="november-rain.mp3">November Rain</option>
+            <option value="dont-cry.mp3">Don't Cry</option>
+            <option value="eres.mp3">Eres</option>
+            <option value="is-this-love.mp3">Is This Love</option>
 
         </select>
 
+        <button onclick="cargarCancion()">
+            ▶ Reproducir
+        </button>
+
+        <button onclick="toggleMusica()">
+            ⏸ Play / Pause
+        </button>
+
     </div>
 
-    <!-- REPRODUCTOR OCULTO -->
-
-    <audio
-        id="reproductor"  class="oculto"
-    ></audio>
+    <!-- AUDIO REAL -->
+    <audio id="reproductor" loop></audio>
 
     <!-- CONTENEDOR PRINCIPAL -->
 
@@ -63,9 +51,7 @@
 
         <h1>Ingresa la fecha</h1>
 
-        <p>
-            Escribe la fecha en formato día/mes
-        </p>
+        <p>Escribe la fecha en formato día/mes</p>
 
         <input
             type="text"
@@ -74,17 +60,11 @@
             oninput="validarFormulario()"
         >
 
-        <button
-            id="botonEnviar"
-            onclick="verificarFecha()"
-            disabled
-        >
+        <button id="botonEnviar" onclick="verificarFecha()" disabled>
             Enviar
         </button>
 
     </div>
-
-    <!-- JAVASCRIPT -->
 
     <script src="script.js"></script>
 
