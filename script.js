@@ -33,20 +33,24 @@ function iniciarMusica() {
     const reproductor = document.getElementById("reproductor");
     const musicaBox = document.getElementById("musicaBox");
 
-    if (!selector.value) return;
+    if (!selector || !selector.value) return;
+    if (!reproductor) return;
 
+    reproductor.pause();
     reproductor.src = selector.value;
     reproductor.load();
 
     const playPromise = reproductor.play();
 
-    if (playPromise !== undefined) {
+    if (playPromise) {
         playPromise
             .then(() => {
-                musicaBox.classList.add("oculto");
+                if (musicaBox) {
+                    musicaBox.classList.add("oculto");
+                }
             })
             .catch(err => {
-                console.log("Bloqueado por autoplay:", err);
+                console.log("Audio bloqueado:", err);
             });
     }
 }
@@ -172,9 +176,11 @@ function continuar() {
 function verificarFecha() {
     const fechaIngresada = document.getElementById("fecha").value.trim();
 
-    iniciarMusica();
+    // primero validación lógica
+    const correcta = fechaIngresada === "27/05";
 
-    if (fechaIngresada === "27/05") {
+    if (correcta) {
+        iniciarMusica(); // solo si es correcto y antes del cambio fuerte de UI
         enviarConEspera(2000);
     } else {
         document.getElementById("contenido").innerHTML = `
