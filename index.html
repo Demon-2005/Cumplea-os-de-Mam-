@@ -54,8 +54,7 @@
     <!-- REPRODUCTOR OCULTO -->
 
     <audio
-        id="reproductor"
-        class="oculto"
+        id="reproductor"  class="oculto"
     ></audio>
 
     <!-- CONTENEDOR PRINCIPAL -->
@@ -84,27 +83,6 @@
         </button>
 
     </div>
-
-<audio id="musica" loop>
-  <source src="musica.mp3" type="audio/mpeg">
-</audio>
-
-<div id="pantallaInicio">
-  Tocá la pantalla 🎵
-</div>
-
-<script>
-const musica = document.getElementById("musica");
-
-document.body.addEventListener("click", () => {
-    musica.play();
-    
-    const inicio = document.getElementById("pantallaInicio");
-    if(inicio){
-        inicio.style.display = "none";
-    }
-}, { once: true });
-</script>
 
     <!-- JAVASCRIPT -->
 
