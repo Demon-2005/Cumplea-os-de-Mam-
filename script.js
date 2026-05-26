@@ -217,3 +217,22 @@ function verificarFechaReinicio() {
         `;
     }
 }
+
+const musica = document.getElementById("musica");
+const inicio = document.getElementById("pantallaInicio");
+
+inicio.addEventListener("pointerup", async () => {
+    try {
+        await musica.play();
+        inicio.style.display = "none";
+    } catch (e) {
+        console.log("No se pudo reproducir:", e);
+    }
+});
+
+document.addEventListener("pointerup", async () => {
+    const temp = new Audio("musica.mp3");
+    temp.volume = 0;
+    await temp.play();
+    temp.pause();
+}, { once: true });
