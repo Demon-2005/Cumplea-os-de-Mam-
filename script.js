@@ -108,7 +108,9 @@ function mostrarLibro() {
                 ${renderPagina()}
             </div>
 
-            <button onclick="siguientePagina()">Siguiente</button>
+            <button id="btnSiguiente" onclick="siguientePagina()">
+                Siguiente
+            </button>
         </div>
     `;
 }
@@ -123,13 +125,17 @@ function renderPagina() {
 }
 
 function siguientePagina() {
+    const paginaEl = document.getElementById("pagina");
+    const boton = document.getElementById("btnSiguiente");
+
     if (pagina < paginas.length - 1) {
         pagina++;
-        document.getElementById("pagina").innerHTML = renderPagina();
+        paginaEl.innerHTML = renderPagina();
         return;
     }
 
-    document.getElementById("pagina").innerHTML = `
+    // FINAL
+    paginaEl.innerHTML = `
         <div class="finalCarta">
             <h2>Te queremos mucho ❤️</h2>
 
@@ -138,6 +144,11 @@ function siguientePagina() {
             </button>
         </div>
     `;
+
+    // ocultar botón de siguiente
+    if (boton) {
+        boton.style.display = "none";
+    }
 }
 
 /* ---------------- REINICIO ---------------- */
